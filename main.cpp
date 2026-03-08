@@ -1,6 +1,7 @@
 #include <vector>
 #include <list>
 #include <string>
+#include <iostream>
 using namespace std;
 
 
@@ -34,6 +35,8 @@ class HashTable {
         int size() const;
         bool isEmpty() const;
         void printTable() const;
+        int getCollisionCount() const;
+        double getBucketSize() const;
 };
 
 HashTable::HashTable(int n) {
@@ -112,19 +115,55 @@ int HashTable::search(const string& key) const{
 
 //implement loadFactor
 
-
+double HashTable::loadFactor() const{
+    return currentSize/capacity;
+}
 
 // implement size
-
+//Private function need a getter
+int HashTable::size() const{
+    return currentSize;
+}
 
 //implement is empty
+bool HashTable::isEmpty() const{
+    return currentSize == 0;
+}
 
 
+int HashTable::getCollisionCount() const{
+    return collisionCount;
+}
+
+double HashTable::getBucketSize() const{
+    double size = 0;
+    double avg = 0;
+    int total = 0;
+    for(auto &bucket : table){
+        total++;
+        avg += bucket.size();
+        if(bucket.size() > size){
+            size = bucket.size();
+        }
+    }
+    return size, avg/total;
+}
 //implement printable
 
-
+void HashTable::printTable() const{
+    for (int i =0; i < capacity; i++){
+        for(const auto& pair : table[i]){
+            cout << "( " << pair.first << ", " << pair.second << " )";
+        }
+        cout << endl;
+    }
+}
 
 //implement rehash
+
+void HashTable::rehash() {
+    
+}
 
 //Part 4 To -do
 /* 
