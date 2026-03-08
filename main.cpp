@@ -13,7 +13,7 @@ std::unordered_map
 std::map
 */
 
-// Part 1
+// Part 1 (Given)
 class HashTable {
     private:
         vector<list<pair<string, int>>> table;
@@ -36,7 +36,15 @@ class HashTable {
         void printTable() const;
 };
 
-// Part 2
+HashTable::HashTable(int n) {
+    capacity = n;
+    table.resize(capacity);
+
+    currentSize = 0;
+    collisionCount = 0;
+}
+
+// Part 2 (Given)
 int HashTable::hashFunction(const string& key) const {
     const int prime = 31;
     long long hash = 0;
@@ -49,9 +57,36 @@ int HashTable::hashFunction(const string& key) const {
 }
 
 //Part 3 To-do
+
+//implement insert and chaining
+
 //Use separate chaining (vector<list<>>)
+
 //If inserting into a non-empty bucket, increment collisionCount
 //If key already exists, update value instead of duplicating
+
+
+//implement remove
+
+
+//implement search
+
+
+//implement loadFactor
+
+
+
+// implement size
+
+
+//implement is empty
+
+
+//implement printable
+
+
+
+//implement rehash
 
 //Part 4 To -do
 /* 
@@ -61,6 +96,12 @@ Double the table capacity
 Reinsert all existing elements
 Reset collision counter appropriately
 */
+
+
+
+
+
+int main(){
 
 // Part 5
 
@@ -77,12 +118,6 @@ Search for:
     Existing key
     Non-existing key
     Remove some keys and verify correctness
-*/
-
-int main(){
-
-}
-
 
 /* Part 6
 Test three input types:
@@ -98,3 +133,7 @@ Write a short explanation (1--2 paragraphs) describing what you observe.
 
 */
 //Using std::unordered_map results in major deduction
+
+}
+
+
