@@ -2,13 +2,14 @@
 #include <list>
 #include <string>
 #include <iostream>
+#include <random>
 using namespace std;
 /*
 You are NOT allowed to use:
 std::unordered_map
 std::map
 */
-
+//Using std::unordered_map results in major deduction
 
 // Part 1 (Given)
 class HashTable {
@@ -39,7 +40,7 @@ class HashTable {
         bool isEmpty() const;
         void printTable() const;
         int getCollisionCount() const;
-        double getBucketSize() const;
+        void getBucketSize() const;
         int getCapacity() const;
 };
 
@@ -145,8 +146,10 @@ int HashTable::getCollisionCount() const{
 int HashTable::getCapacity() const{
     return capacity;
 }
+
 // A bucket is just a term used for the container that hold items hashed to same index, hashed coorelated, handled through chaining
-double HashTable::getBucketSize() const{
+// For Part 6, return max and avg in one function
+void HashTable::getBucketSize() const{
     double size = 0;
     double avg = 0;
     int total = 0;
@@ -157,7 +160,8 @@ double HashTable::getBucketSize() const{
             size = bucket.size();
         }
     }
-    return size, avg/total;
+    cout << "Max bucket size: " << size << endl;
+    cout << "Average bucket length: " << size/100 << endl;
 }
 
 //implement printable
@@ -193,6 +197,34 @@ void HashTable::rehash() {
     }
 }
 
+/* Part 6: Random, sequential, and prefix test
+Record:
+Total collisions
+Maximum bucket size
+Average bucket length
+Write a short explanation (1--2 paragraphs) describing what you observe.
+*/
+
+string randomHTKeys(int n){
+    //random set
+    string c = "abcdefghijklmnopqrstuvwxyz";
+    string randString = "";
+
+    for(int i=0; i < n; i++){
+        randString += c[rand() % c.size()];
+    }
+    return randString;
+}
+
+void htTest(vector<string> keys){
+    HashTable testHash;
+
+    for(int i = 0;i < keys.size(); i++) testHash.insert(keys[i], i);
+
+    cout << "Collisions: " << testHash.getCollisionCount() << endl;
+    testHash.getBucketSize();
+}
+
 
 int main(){
     HashTable ht;
@@ -216,20 +248,21 @@ int main(){
     ht.remove("student50");
     cout << ht.search("student50") << endl;
 
-/* Part 6
-Test three input types:
-Random strings
+//Part 6 use existing structure and ht HashTable to handle sequential keys section
+    vector<string> randomKeys;
+    //7 letter random string keys
+    for(int i=0; i <= 100; i++) randomKeys.push_back(randomHTKeys(7));
 
-Same prefix keys (e.g., data_0001, data_0002, ...)
+    vector<string> sequential;
+    for(int i=0; i<=100; i++) sequential.push_back("student" + to_string(i));
 
-Record:
-Total collisions
-Maximum bucket size
-Average bucket length
-Write a short explanation (1--2 paragraphs) describing what you observe.
+    vector<string> prefix;
+    for(int i=0; i<=100; i++) prefix.push_back("data_" + to_string(i));
 
-*/
-//Using std::unordered_map results in major deduction
+// Call Random
+
+//Same Prefix
+
 
 }
 
