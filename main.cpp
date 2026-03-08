@@ -59,7 +59,25 @@ int HashTable::hashFunction(const string& key) const {
 //Part 3 To-do
 
 //implement insert and chaining
+void HashTable::insert(const string& key, int value){
+    int index = hashFunction(key);
+    
+    for(auto& pair : table[index]) {
+        if(pair.first == key){
+            pair.second = value;
+            return;
+        }
+    }
+    if(!table[index].empty()) collisionCount++;
+    
+    table[index].push_back({key, value});
+    currentSize++;
 
+    if (loadFactor() > .75){
+        rehash();
+    }
+
+}
 //Use separate chaining (vector<list<>>)
 
 //If inserting into a non-empty bucket, increment collisionCount
@@ -67,10 +85,30 @@ int HashTable::hashFunction(const string& key) const {
 
 
 //implement remove
+bool HashTable::remove(const string& key){
+    int index = hashFunction(key);
 
+    for(auto it = table[index].begin(); it != table[index].end(); it++){
+        if(it->first == key){
+            table[index].erase(it);
+            currentSize--;
+            return true;
+        }
+    }
+    return false;
+}
 
 //implement search
+int HashTable::search(const string& key) const{
+    int index = hashFunction(key);
 
+    for(const auto&pair: table[index]){
+        if(pair.first == key){
+            return pair.second;
+        }
+    }
+    return -1;
+}
 
 //implement loadFactor
 
