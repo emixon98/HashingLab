@@ -3,23 +3,26 @@
 #include <string>
 #include <iostream>
 using namespace std;
-
-
-/*You will implement a HashTable class that stores:
-
-string keys
-int values
+/*
 You are NOT allowed to use:
 std::unordered_map
 std::map
 */
 
+
 // Part 1 (Given)
 class HashTable {
     private:
+    //vector containing list that hold pairs in the form of string, int, pairing stores the vals together
+    //.first key, .second val
+
+    //need getters for our private vars since requested in part 5, set/incremented inside of other functions
         vector<list<pair<string, int>>> table;
+        //elements
         int currentSize;
+        //#buckets
         int capacity;
+    
         int collisionCount;
 
         int hashFunction(const string& key) const;
@@ -37,8 +40,10 @@ class HashTable {
         void printTable() const;
         int getCollisionCount() const;
         double getBucketSize() const;
+        int getCapacity() const;
 };
 
+//Basic Constructor
 HashTable::HashTable(int n) {
     capacity = n;
     table.resize(capacity);
@@ -48,10 +53,12 @@ HashTable::HashTable(int n) {
 }
 
 // Part 2 (Given)
+//Hashes our keys with a prime number for better distribution, modulo by capacity to ensure fits into a valid index
+//returns index to that key, ie) if we dont altar our table (capacity change), the returned value should remain the same
 int HashTable::hashFunction(const string& key) const {
     const int prime = 31;
     long long hash = 0;
-
+    //each char in string utilized in hash
     for (char c : key) {
         hash = hash * prime + c;
     }
@@ -61,37 +68,39 @@ int HashTable::hashFunction(const string& key) const {
 
 //Part 3 To-do
 
-//implement insert and chaining
+
+//add a new key-val pair
 void HashTable::insert(const string& key, int value){
     int index = hashFunction(key);
     
+    //Check if key already exist        If key already exists, update value instead of duplicating
     for(auto& pair : table[index]) {
         if(pair.first == key){
             pair.second = value;
             return;
         }
     }
+    //collision occurence       If inserting into a non-empty bucket, increment collisionCount
     if(!table[index].empty()) collisionCount++;
     
+    //add element to back of list
     table[index].push_back({key, value});
     currentSize++;
-
+    
     if (loadFactor() > .75){
         rehash();
     }
 
 }
-//Use separate chaining (vector<list<>>)
 
-//If inserting into a non-empty bucket, increment collisionCount
-//If key already exists, update value instead of duplicating
-
+//Use separate chaining (vector<list<>>) Where does this go?
 
 //implement remove
 bool HashTable::remove(const string& key){
     int index = hashFunction(key);
-
+    //iterator loop, points to elements in bucket
     for(auto it = table[index].begin(); it != table[index].end(); it++){
+        //if first part of pair(key) matches desired, remove
         if(it->first == key){
             table[index].erase(it);
             currentSize--;
@@ -101,7 +110,7 @@ bool HashTable::remove(const string& key){
     return false;
 }
 
-//implement search
+//find key's hash, return its pair
 int HashTable::search(const string& key) const{
     int index = hashFunction(key);
 
@@ -110,31 +119,33 @@ int HashTable::search(const string& key) const{
             return pair.second;
         }
     }
+    cout << "Not found" << endl;
     return -1;
 }
 
-//implement loadFactor
-
+//implement loadFactor eq
 double HashTable::loadFactor() const{
     return currentSize/capacity;
 }
 
-// implement size
-//Private function need a getter
+// Size getter
 int HashTable::size() const{
     return currentSize;
 }
 
-//implement is empty
 bool HashTable::isEmpty() const{
     return currentSize == 0;
 }
 
-
+//collisionCount getter
 int HashTable::getCollisionCount() const{
     return collisionCount;
 }
 
+int HashTable::getCapacity() const{
+    return capacity;
+}
+// A bucket is just a term used for the container that hold items hashed to same index, hashed coorelated, handled through chaining
 double HashTable::getBucketSize() const{
     double size = 0;
     double avg = 0;
@@ -148,8 +159,8 @@ double HashTable::getBucketSize() const{
     }
     return size, avg/total;
 }
-//implement printable
 
+//implement printable
 void HashTable::printTable() const{
     for (int i =0; i < capacity; i++){
         for(const auto& pair : table[i]){
@@ -159,47 +170,56 @@ void HashTable::printTable() const{
     }
 }
 
-//implement rehash
-
+//implement rehash Part 4
 void HashTable::rehash() {
-    
+    int oldC = capacity;
+    //double table          Double the table capacity
+    capacity *= 2;
+
+    //temp vector to retain info
+    vector<list<pair<string, int>>> oldT = table;
+
+    table.clear();
+    table.resize(capacity);
+    currentSize = 0;
+    //Reset collision counter appropriately
+    collisionCount = 0;
+    //reinsert everything, which makes a new hash for every key since our capacity changes
+    //Reinsert all existing elements
+    for(auto &bucket : oldT){
+       for(auto &pair : bucket){
+        insert(pair.first, pair.second);
+       } 
+    }
 }
-
-//Part 4 To -do
-/* 
-When: loadFactor() > 0.75
-You must:
-Double the table capacity
-Reinsert all existing elements
-Reset collision counter appropriately
-*/
-
-
-
 
 
 int main(){
+    HashTable ht;
+    //Insert at least 100 words
+    //Sequential keys (e.g., student1, student2, ...)
+    for(int i = 0; i <100; i++){
+        string key = "student" + to_string(i);
+        ht.insert(key, i);
+    }
+// Print:
+    cout << "Table Capacity: " << ht.getCapacity() << endl;
+    cout << "Number of elements: " << ht.size() << endl;
+    cout << "Load factor: " << ht.loadFactor() << endl;
+    cout << "Total Collisions: " << ht.getCollisionCount() << endl;
 
-// Part 5
+//Search for: Existing, Non-Existing
+    cout << ht.search("student1") << endl;
+    cout << ht.search("student120") << endl;
 
-/*
-In main():
-
-Insert at least 100 words
-Print:
-    Table capacity
-    Number of elements
-    Load factor
-    Total collisions
-Search for:
-    Existing key
-    Non-existing key
-    Remove some keys and verify correctness
+//Remove some keys and verify correctness
+    ht.remove("student50");
+    cout << ht.search("student50") << endl;
 
 /* Part 6
 Test three input types:
 Random strings
-Sequential keys (e.g., student1, student2, ...)
+
 Same prefix keys (e.g., data_0001, data_0002, ...)
 
 Record:
