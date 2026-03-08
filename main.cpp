@@ -2,7 +2,7 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include <random>
+#include <cstdlib>
 using namespace std;
 /*
 You are NOT allowed to use:
@@ -18,6 +18,8 @@ class HashTable {
     //.first key, .second val
 
     //need getters for our private vars since requested in part 5, set/incremented inside of other functions
+
+    //Use separate chaining (vector<list<>>) 
         vector<list<pair<string, int>>> table;
         //elements
         int currentSize;
@@ -55,7 +57,7 @@ HashTable::HashTable(int n) {
 
 // Part 2 (Given)
 //Hashes our keys with a prime number for better distribution, modulo by capacity to ensure fits into a valid index
-//returns index to that key, ie) if we dont altar our table (capacity change), the returned value should remain the same
+//if capacity doesnt change same key produces same index
 int HashTable::hashFunction(const string& key) const {
     const int prime = 31;
     long long hash = 0;
@@ -67,8 +69,9 @@ int HashTable::hashFunction(const string& key) const {
     return hash % capacity;
 }
 
-//Part 3 To-do
 
+
+//Part 3
 
 //add a new key-val pair
 void HashTable::insert(const string& key, int value){
@@ -94,7 +97,7 @@ void HashTable::insert(const string& key, int value){
 
 }
 
-//Use separate chaining (vector<list<>>) Where does this go?
+
 
 //implement remove
 bool HashTable::remove(const string& key){
@@ -126,7 +129,8 @@ int HashTable::search(const string& key) const{
 
 //implement loadFactor eq
 double HashTable::loadFactor() const{
-    return currentSize/capacity;
+    //make sure to convert to double so I dont get 0
+    return (double)currentSize/capacity;
 }
 
 // Size getter
@@ -161,7 +165,8 @@ void HashTable::getBucketSize() const{
         }
     }
     cout << "Max bucket size: " << size << endl;
-    cout << "Average bucket length: " << size/100 << endl;
+    //total elements / number of buckets
+    cout << "Average bucket length: " << avg/capacity << endl;
 }
 
 //implement printable
@@ -238,32 +243,35 @@ int main(){
     cout << "Table Capacity: " << ht.getCapacity() << endl;
     cout << "Number of elements: " << ht.size() << endl;
     cout << "Load factor: " << ht.loadFactor() << endl;
-    cout << "Total Collisions: " << ht.getCollisionCount() << endl;
+    cout << "Total Collisions: " << ht.getCollisionCount() << endl << endl;
 
 //Search for: Existing, Non-Existing
+    cout << "Searching for existing: " << endl;
     cout << ht.search("student1") << endl;
-    cout << ht.search("student120") << endl;
+    cout << endl << "Searching for non-existing " << endl;
+    cout << ht.search("student120") << endl << endl;
 
 //Remove some keys and verify correctness
+    cout << "Removing student and searching for student" << endl;
     ht.remove("student50");
-    cout << ht.search("student50") << endl;
+    cout << ht.search("student50") << endl << endl;
 
 //Part 6 use existing structure and ht HashTable to handle sequential keys section
     vector<string> randomKeys;
     //7 letter random string keys
-    for(int i=0; i <= 100; i++) randomKeys.push_back(randomHTKeys(7));
+    for(int i=0; i < 100; i++) randomKeys.push_back(randomHTKeys(7));
 
     vector<string> sequential;
-    for(int i=0; i<=100; i++) sequential.push_back("student" + to_string(i));
+    for(int i=0; i < 100; i++) sequential.push_back("student" + to_string(i));
 
     vector<string> prefix;
-    for(int i=0; i<=100; i++) prefix.push_back("data_" + to_string(i));
-
-// Call Random
-
-//Same Prefix
-
-
+    for(int i=0; i< 100; i++) prefix.push_back("data_" + to_string(i));
+    cout << "Testing random keys" << endl;
+    htTest(randomKeys);
+    cout << endl << "Testing sequential keys" << endl;
+    htTest(sequential);
+    cout << endl << "Testing prefix keys" << endl;
+    htTest(prefix);
 }
 
 
