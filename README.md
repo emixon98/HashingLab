@@ -124,7 +124,7 @@ void HashTable::printTable() const{
     }
 }
 ```
-1. Initialzie a 100 word/string hashtable.
+1. Initialize a 100 word/string hashtable.
 2. Print its capacity, elements, loadfactor, and collisions.
 3. Search for and existing and non-existing key.
 4. Remove a key and verify if it was removed through both a search and print of the table.
