@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <random>
 using namespace std;
 /*
 You are NOT allowed to use:
@@ -84,7 +85,7 @@ void HashTable::insert(const string& key, int value){
             return;
         }
     }
-    //collision occurence       If inserting into a non-empty bucket, increment collisionCount
+    //collision occurence  
     if(!table[index].empty()) collisionCount++;
     
     //add element to back of list
@@ -173,9 +174,8 @@ void HashTable::getBucketSize() const{
 void HashTable::printTable() const{
     for (int i =0; i < capacity; i++){
         for(const auto& pair : table[i]){
-            cout << "( " << pair.first << ", " << pair.second << " )";
+            cout << "( " << pair.first << ", " << pair.second << " )" << endl;
         }
-        cout << endl;
     }
 }
 
@@ -212,11 +212,15 @@ Write a short explanation (1--2 paragraphs) describing what you observe.
 
 string randomHTKeys(int n){
     //random set
-    string c = "abcdefghijklmnopqrstuvwxyz";
-    string randString = "";
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(0,25);
 
+    string randString;
+    //'a' and (0, 25) are used to ensure we have letters from a-z
     for(int i=0; i < n; i++){
-        randString += c[rand() % c.size()];
+        char c = 'a' + dist(gen);
+        randString+=c;
     }
     return randString;
 }
@@ -255,7 +259,10 @@ int main(){
     cout << "Removing student and searching for student" << endl;
     ht.remove("student50");
     cout << ht.search("student50") << endl << endl;
-
+    //print table for verification as well
+    ht.printTable();
+    //50 indeed does not show up
+    cout << endl;
 //Part 6 use existing structure and ht HashTable to handle sequential keys section
     vector<string> randomKeys;
     //7 letter random string keys
