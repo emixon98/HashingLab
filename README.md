@@ -160,6 +160,6 @@ All 3 input types produced the same average bucket length because the polynomial
 
 
 #### Video Link
-I know a video wasn't necesarry, but revisiting the material and calling back on information learned helps me remember better, so I made one regardless. I would also like to clarify that some of the wording conventions caused me to stumble and I may have misspoke at points and used list and bucket interchangeably, but I do understand that a bucket is just a list at an index that contains all of the key value pairs.
+I know a video wasn't necesarry, but revisiting the material and calling back on information learned helps me remember better, so I made one regardless. I would also like to clarify that some of the wording conventions caused me to stumble and I may have misspoke at points and used list and bucket interchangeably, but I do understand that a bucket is just a list at an index that contains all of the key value pairs that hash to it.
 Please let me know if there are any clarifications or improvements I can make, thank you. 
 Youtube Link: https://youtu.be/Dh2zwBYmFps
