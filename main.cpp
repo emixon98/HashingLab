@@ -14,26 +14,15 @@ std::map
 
 class HashTable {
     private:
-    //vector containing list that hold pairs in the form of string, int, pairing stores the vals together
-    //.first key, .second val
-
-    //need getters for our private vars since requested in part 5, set/incremented inside of other functions
-
     //Use separate chaining (vector<list<>>) 
         vector<list<pair<string, int>>> table;
-        //elements
         int currentSize;
-        //#buckets
         int capacity;
-    
         int collisionCount;
-
         int hashFunction(const string& key) const;
         void rehash();
-
     public:
         HashTable(int size = 11);
-
         void insert(const string& key, int value);
         bool remove(const string& key);
         int search(const string& key) const;
@@ -46,7 +35,6 @@ class HashTable {
         int getCapacity() const;
 };
 
-
 HashTable::HashTable(int n) {
     capacity = n;
     table.resize(capacity);
@@ -56,12 +44,9 @@ HashTable::HashTable(int n) {
 }
 
 
-//Hashes our keys with a prime number for better distribution, modulo by capacity to ensure fits into a valid index
-//if capacity doesnt change same key produces same index
 int HashTable::hashFunction(const string& key) const {
     const int prime = 31;
     long long hash = 0;
-    //each char in string utilized in hash
     for (char c : key) {
         hash = hash * prime + c;
     }
@@ -138,8 +123,7 @@ int HashTable::getCapacity() const{
     return capacity;
 }
 
-// A bucket is just a term used for the container that hold items hashed to same index, hashed coorelated, handled through chaining
-// For Part 6, return max and avg in one function
+// For Part 6, return max and avg in one function so I dont have to repeat for each type
 void HashTable::getBucketSize() const{
     double size = 0;
     double avg = 0;
@@ -152,7 +136,7 @@ void HashTable::getBucketSize() const{
         }
     }
     cout << "Max bucket size: " << size << endl;
-    //total elements / number of buckets
+    //total elements / number of buckets should give avg
     cout << "Average bucket length: " << avg/capacity << endl;
 }
 
@@ -167,17 +151,16 @@ void HashTable::printTable() const{
 
 void HashTable::rehash() {
     int oldC = capacity;
-    //double table          Double the table capacity
+    //double table 
     capacity *= 2;
     //temp vector to retain info
     vector<list<pair<string, int>>> oldT = table;
     table.clear();
     table.resize(capacity);
     currentSize = 0;
-    //Reset collision counter appropriately
+    //Reset collision counter before inserting elements all over into new ht
     collisionCount = 0;
     //reinsert everything, which makes a new hash for every key since our capacity changes
-    //Reinsert all existing elements
     for(auto &bucket : oldT){
        for(auto &pair : bucket){
         insert(pair.first, pair.second);
@@ -186,12 +169,11 @@ void HashTable::rehash() {
 }
 
 string randomHTKeys(int n){
-    //random set
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> dist(0,25);
     string randString;
-    //'a' and (0, 25) are used to ensure we have letters from a-z
+    //'a' and (0, 25) are used to ensure we have letters from a-z, could include numbers but I'm fine with strictly alphabetical strings
     for(int i=0; i < n; i++){
         char c = 'a' + dist(gen);
         randString+=c;
