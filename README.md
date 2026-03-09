@@ -77,6 +77,10 @@ void HashTable::insert(const string& key, int value){
 ```
 ### Part 4: Resizing(Rehashing)
 As asked in the task, if we need to rehash we want to double table capacity and reinsert all existing elements, resetting our collision counter before running our insert function, in the case we have collisions in this process. To do so we need to store the old tables information into temp vars, allowing us to reinsert through iteration of each key-value in the old table. For each bucket in the old table, in the case of shared indices, and for each pair in each bucket, we insert that key-value pair into our new doubled in size table. Each key will have a new indice since capacity has changed (hash % capacity). 
+1. We double the table capacity
+2. we copy the old table for reinsertion after expanding and clearing main table
+3. reset collision counter
+4. reinsert all existing elements
 ```cpp
 void HashTable::rehash() {
     int oldC = capacity;
@@ -120,6 +124,10 @@ void HashTable::printTable() const{
     }
 }
 ```
+1. Initialzie a 100 word/string hashtable.
+2. Print its capacity, elements, loadfactor, and collisions.
+3. Search for and existing and non-existing key.
+4. Remove a key and verify if it was removed through both a search and print of the table.
 ```cpp
 int main(){
     HashTable ht;
@@ -200,6 +208,9 @@ void HashTable::getBucketSize() const{
 }
 ```
 main() implementation/addition
+1. Initialize a random, sequential, and prefix key vector
+2. Create hashtables for each by calling htTest function
+3. cout Collisions, Max/avg bucket size through end of htTest function which utilizes getCollisionCount and getBucketSize
 ```cpp
     vector<string> randomKeys;
     //7 letter random string keys
