@@ -15,9 +15,8 @@ Separate Chaining was utilized in our given Hash Table class for collision handl
 1. Compute hash index
 2. Search bucket to see if key exists already
 3. Update value if so
-4. else append a new pair to list
-5. Increase size
-6. rehash if load factor exceed .75
+4. else append a new pair to list and increase size
+5. rehash if load factor exceed .75
 ```cpp
 void HashTable::insert(const string& key, int value){
     int index = hashFunction(key);
