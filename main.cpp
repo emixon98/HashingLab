@@ -12,7 +12,6 @@ std::map
 */
 //Using std::unordered_map results in major deduction
 
-// Part 1 (Given)
 class HashTable {
     private:
     //vector containing list that hold pairs in the form of string, int, pairing stores the vals together
@@ -47,7 +46,7 @@ class HashTable {
         int getCapacity() const;
 };
 
-//Basic Constructor
+
 HashTable::HashTable(int n) {
     capacity = n;
     table.resize(capacity);
@@ -56,7 +55,7 @@ HashTable::HashTable(int n) {
     collisionCount = 0;
 }
 
-// Part 2 (Given)
+
 //Hashes our keys with a prime number for better distribution, modulo by capacity to ensure fits into a valid index
 //if capacity doesnt change same key produces same index
 int HashTable::hashFunction(const string& key) const {
@@ -71,14 +70,10 @@ int HashTable::hashFunction(const string& key) const {
 }
 
 
-
-//Part 3
-
 //add a new key-val pair
 void HashTable::insert(const string& key, int value){
     int index = hashFunction(key);
-    
-    //Check if key already exist        If key already exists, update value instead of duplicating
+    //Check if key already exist     
     for(auto& pair : table[index]) {
         if(pair.first == key){
             pair.second = value;
@@ -87,7 +82,6 @@ void HashTable::insert(const string& key, int value){
     }
     //collision occurence  
     if(!table[index].empty()) collisionCount++;
-    
     //add element to back of list
     table[index].push_back({key, value});
     currentSize++;
@@ -95,19 +89,16 @@ void HashTable::insert(const string& key, int value){
     if (loadFactor() > .75){
         rehash();
     }
-
 }
 
 
-
-//implement remove
 bool HashTable::remove(const string& key){
     int index = hashFunction(key);
     //iterator loop, points to elements in bucket
-    for(auto it = table[index].begin(); it != table[index].end(); it++){
+    for(auto i = table[index].begin(); i != table[index].end(); i++){
         //if first part of pair(key) matches desired, remove
-        if(it->first == key){
-            table[index].erase(it);
+        if(i->first == key){
+            table[index].erase(i);
             currentSize--;
             return true;
         }
@@ -115,10 +106,8 @@ bool HashTable::remove(const string& key){
     return false;
 }
 
-//find key's hash, return its pair
 int HashTable::search(const string& key) const{
     int index = hashFunction(key);
-
     for(const auto&pair: table[index]){
         if(pair.first == key){
             return pair.second;
@@ -128,13 +117,11 @@ int HashTable::search(const string& key) const{
     return -1;
 }
 
-//implement loadFactor eq
 double HashTable::loadFactor() const{
     //make sure to convert to double so I dont get 0
     return (double)currentSize/capacity;
 }
 
-// Size getter
 int HashTable::size() const{
     return currentSize;
 }
@@ -143,7 +130,6 @@ bool HashTable::isEmpty() const{
     return currentSize == 0;
 }
 
-//collisionCount getter
 int HashTable::getCollisionCount() const{
     return collisionCount;
 }
@@ -170,24 +156,21 @@ void HashTable::getBucketSize() const{
     cout << "Average bucket length: " << avg/capacity << endl;
 }
 
-//implement printable
 void HashTable::printTable() const{
     for (int i =0; i < capacity; i++){
+        //got rid of endl outside 2nd for loop, caused weird formatting for empty buckets
         for(const auto& pair : table[i]){
             cout << "( " << pair.first << ", " << pair.second << " )" << endl;
         }
     }
 }
 
-//implement rehash Part 4
 void HashTable::rehash() {
     int oldC = capacity;
     //double table          Double the table capacity
     capacity *= 2;
-
     //temp vector to retain info
     vector<list<pair<string, int>>> oldT = table;
-
     table.clear();
     table.resize(capacity);
     currentSize = 0;
@@ -202,20 +185,11 @@ void HashTable::rehash() {
     }
 }
 
-/* Part 6: Random, sequential, and prefix test
-Record:
-Total collisions
-Maximum bucket size
-Average bucket length
-Write a short explanation (1--2 paragraphs) describing what you observe.
-*/
-
 string randomHTKeys(int n){
     //random set
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> dist(0,25);
-
     string randString;
     //'a' and (0, 25) are used to ensure we have letters from a-z
     for(int i=0; i < n; i++){
@@ -224,16 +198,19 @@ string randomHTKeys(int n){
     }
     return randString;
 }
-
+/* Part 6: Random, sequential, and prefix test
+Record:
+Total collisions
+Maximum bucket size
+Average bucket length
+*/
 void htTest(vector<string> keys){
     HashTable testHash;
-
     for(int i = 0;i < keys.size(); i++) testHash.insert(keys[i], i);
 
     cout << "Collisions: " << testHash.getCollisionCount() << endl;
     testHash.getBucketSize();
 }
-
 
 int main(){
     HashTable ht;
@@ -243,6 +220,7 @@ int main(){
         string key = "student" + to_string(i);
         ht.insert(key, i);
     }
+
 // Print:
     cout << "Table Capacity: " << ht.getCapacity() << endl;
     cout << "Number of elements: " << ht.size() << endl;
@@ -256,7 +234,7 @@ int main(){
     cout << ht.search("student120") << endl << endl;
 
 //Remove some keys and verify correctness
-    cout << "Removing student and searching for student" << endl;
+    cout << "Removing a student and searching for that student: " << endl;
     ht.remove("student50");
     cout << ht.search("student50") << endl << endl;
     //print table for verification as well
@@ -267,10 +245,8 @@ int main(){
     vector<string> randomKeys;
     //7 letter random string keys
     for(int i=0; i < 100; i++) randomKeys.push_back(randomHTKeys(7));
-
     vector<string> sequential;
     for(int i=0; i < 100; i++) sequential.push_back("student" + to_string(i));
-
     vector<string> prefix;
     for(int i=0; i< 100; i++) prefix.push_back("data_" + to_string(i));
     cout << "Testing random keys" << endl;

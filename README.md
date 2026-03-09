@@ -142,7 +142,6 @@ void htTest(vector<string> keys){
 
 main() implementation/addition
 ```cpp
-//Part 6 use existing structure and ht HashTable to handle sequential keys section
     vector<string> randomKeys;
     //7 letter random string keys
     for(int i=0; i < 100; i++) randomKeys.push_back(randomHTKeys(7));
