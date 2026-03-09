@@ -7,9 +7,43 @@ Most of this was given, I added the following to meet the task labeled in Part 5
         void getBucketSize() const;
         int getCapacity() const;
 ```
+```cpp
+class HashTable {
+    private:
+    //Use separate chaining (vector<list<>>) 
+        vector<list<pair<string, int>>> table;
+        int currentSize;
+        int capacity;
+        int collisionCount;
+        int hashFunction(const string& key) const;
+        void rehash();
+    public:
+        HashTable(int size = 11);
+        void insert(const string& key, int value);
+        bool remove(const string& key);
+        int search(const string& key) const;
+        double loadFactor() const;
+        int size() const;
+        bool isEmpty() const;
+        void printTable() const;
+        int getCollisionCount() const;
+        void getBucketSize() const;
+        int getCapacity() const;
+};
+```
 ### Part 2
 Given, no changes made.
+```cpp
+int HashTable::hashFunction(const string& key) const {
+    const int prime = 31;
+    long long hash = 0;
+    for (char c : key) {
+        hash = hash * prime + c;
+    }
 
+    return hash % capacity;
+}
+```
 ### Part 3: Insert and Collision Handling
 Separate Chaining was utilized in our given Hash Table class for collision handling. We created buckets through our list chaining, allowing us to handle collisions through a different bucket per index. Multiple key-val pairs can then be stored in the same bucket when a collision does occur. When two or more keys produce the same index a collision occurs, but we handle it through storing the new pair at the list at that index. Our goal is even distribution with our hash function if we exceed a favorable distribution/loadfactor the table is rehashed to reduce our collisions.
 1. Compute hash index
