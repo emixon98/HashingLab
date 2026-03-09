@@ -114,11 +114,15 @@ Created Random strings through the following function:
 ```cpp
 string randomHTKeys(int n){
     //random set
-        string c = "abcdefghijklmnopqrstuvwxyz";
-        string randString = "";
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(0,25);
 
+    string randString;
+    //'a' and (0, 25) are used to ensure we have letters from a-z
     for(int i=0; i < n; i++){
-        randString += c[rand() % c.size()];
+        char c = 'a' + dist(gen);
+        randString+=c;
     }
     return randString;
 }
