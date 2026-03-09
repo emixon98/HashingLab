@@ -47,7 +47,7 @@ As asked in the task, if we need to rehash we want to double table capacity and 
 ```cpp
 void HashTable::rehash() {
     int oldC = capacity;
-    //double table          Double the table capacity
+    //double table      
     capacity *= 2;
 
     //temp vector to retain info
@@ -59,7 +59,6 @@ void HashTable::rehash() {
     //Reset collision counter appropriately
     collisionCount = 0;
     //reinsert everything, which makes a new hash for every key since our capacity changes
-    //Reinsert all existing elements
     for(auto &bucket : oldT){
        for(auto &pair : bucket){
         insert(pair.first, pair.second);
@@ -81,7 +80,6 @@ int HashTable::size() const{
 ```cpp
 int main(){
     HashTable ht;
-    //Insert at least 100 words
     //Sequential keys (e.g., student1, student2, ...)
     for(int i = 0; i <100; i++){
         string key = "student" + to_string(i);
