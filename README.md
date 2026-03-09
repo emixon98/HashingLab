@@ -218,7 +218,7 @@ main() implementation/addition
     htTest(prefix);
 ```
 #### Part 6: Explanation/Analysis
-All 3 input types produced the same average bucket length because the polynomial hash inherently distributes fairly even throughout the table. Sequential and prefix keys differ only in their prefix, but each character still is used in calculation of the hash value, allowing even distribution across buckets. Random keys had more collisions because randomnly generated strings may have the same index with the modulo operation for our hash function. 
+All 3 input types produced the same average bucket length because the polynomial hash inherently distributes fairly even throughout the table. Sequential and prefix keys differ only in their prefix (student or data_), but each character still is used in calculation of the hash value, "_" is just another character, allowing even distribution across buckets. Random keys had more collisions because randomnly generated strings may have the same index with the modulo operation for our hash function. 
 
 
 #### Video Link
