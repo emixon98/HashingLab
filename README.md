@@ -75,7 +75,17 @@ int HashTable::size() const{
     return currentSize;
 }
 ```
-
+Print table function for extra layer of verification that deleted key no longer exist, and that search function is correct.
+```cpp
+void HashTable::printTable() const{
+    for (int i =0; i < capacity; i++){
+        //got rid of endl outside 2nd for loop, caused weird formatting for empty buckets
+        for(const auto& pair : table[i]){
+            cout << "( " << pair.first << ", " << pair.second << " )" << endl;
+        }
+    }
+}
+```
 ```cpp
 int main(){
     HashTable ht;
@@ -136,7 +146,25 @@ void htTest(vector<string> keys){
     testHash.getBucketSize();
 }
 ```
-
+Function for calculating running average of bucket size and the max size of a bucket at the same time.
+```cpp
+// For Part 6, return max and avg in one function so I dont have to repeat for each type
+void HashTable::getBucketSize() const{
+    double size = 0;
+    double avg = 0;
+    int total = 0;
+    for(auto &bucket : table){
+        total++;
+        avg += bucket.size();
+        if(bucket.size() > size){
+            size = bucket.size();
+        }
+    }
+    cout << "Max bucket size: " << size << endl;
+    //total elements / number of buckets should give avg
+    cout << "Average bucket length: " << avg/capacity << endl;
+}
+```
 main() implementation/addition
 ```cpp
     vector<string> randomKeys;
