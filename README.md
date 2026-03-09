@@ -42,7 +42,7 @@ void HashTable::insert(const string& key, int value){
 }
 ```
 ### Part 4: Resizing(Rehashing)
-As asked in the task, if we need to rehash we want to double table capacity and reinsert all existing elements, resetting our collision counter before running our insert function, in the case we have collisions in this process. To do so we need to store the old tables information into temp vars, allowing us to reinsert through iteration each key-value in the old table. For each bucket in the old table, in the case of shared indices, and for each pair in each bucket, we insert that key-value pair into our new doubled in size table. Each key will have a new indice since capacity has changed (hash % capacity). 
+As asked in the task, if we need to rehash we want to double table capacity and reinsert all existing elements, resetting our collision counter before running our insert function, in the case we have collisions in this process. To do so we need to store the old tables information into temp vars, allowing us to reinsert through iteration of each key-value in the old table. For each bucket in the old table, in the case of shared indices, and for each pair in each bucket, we insert that key-value pair into our new doubled in size table. Each key will have a new indice since capacity has changed (hash % capacity). 
 ```cpp
 void HashTable::rehash() {
     int oldC = capacity;
@@ -68,7 +68,7 @@ void HashTable::rehash() {
 ```
 
 ### Part 5: Testing
-The comments within this code block coincide with each required task of this section, some of which relate to getter functions implemented from the starting code. These are rather simple and follow the traditional structure of:
+The comments within this code block coincide with each required task of this section, some of which relate to getter functions implemented from the starting code, and merely retreive private data members. These are rather simple and follow the traditional structure of:
 
 ```cpp
 int HashTable::size() const{
