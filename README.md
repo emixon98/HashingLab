@@ -11,8 +11,7 @@ Most of this was given, I added the following to meet the task labeled in Part 5
 Given, no changes made.
 
 ### Part 3: Insert and Collision Handling
-Separate Chaining was utilized in our given Hash Table class for collision handling.
-#### Insert
+Separate Chaining was utilized in our given Hash Table class for collision handling. We created buckets through our list chaining, allowing us to handle collisions through a different bucket per index before a collision even occurs. Multiple key-val pairs can then be stored in the same bucket when a collision does occur. When two or more keys produce the same index a collision occurs, but we handle it through storing the new pair at the list at that index. Our goal is even distribution with our hash function if we exceed a favorable distribution/loadfactor the table is rehashed to reduce our collisions.
 1. Compute hash index
 2. Search bucket to see if key exists already
 3. Update value if so
@@ -30,7 +29,7 @@ void HashTable::insert(const string& key, int value){
             return;
         }
     }
-    //collision occurence, already contains 1 element. 2 keys produced same hash index.
+    //collision occurence, already contains 1 element. 2 or more keys produced same hash index.
     if(!table[index].empty()) collisionCount++;
     
     //add element to back of list
